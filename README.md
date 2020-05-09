@@ -2,33 +2,10 @@
 
 [![report](https://img.shields.io/badge/arxiv-report-red)](https://arxiv.org/abs/1905.05172) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1GFSsqP2BWz4gtq0e-nki00ZHSirXwFyY)
 
-News:
-* \[2020/05/04\] Added EGL rendering option for training data generation. Now you can create your own training data with headless machines!
-* \[2020/04/13\] Demo with Google Colab (incl. visualization) is available. Special thanks to [@nanopoteto](https://github.com/nanopoteto)!!!
-* \[2020/02/26\] License is updated to MIT license! Enjoy!
-
 This repository contains a pytorch implementation of "[PIFu: Pixel-Aligned Implicit Function for High-Resolution Clothed Human Digitization](https://arxiv.org/abs/1905.05172)".
 
 [Project Page](https://shunsukesaito.github.io/PIFu/)
 ![Teaser Image](https://shunsukesaito.github.io/PIFu/resources/images/teaser.png)
-
-If you find the code useful in your research, please consider citing the paper.
-
-```
-@InProceedings{saito2019pifu,
-author = {Saito, Shunsuke and Huang, Zeng and Natsume, Ryota and Morishima, Shigeo and Kanazawa, Angjoo and Li, Hao},
-title = {PIFu: Pixel-Aligned Implicit Function for High-Resolution Clothed Human Digitization},
-booktitle = {The IEEE International Conference on Computer Vision (ICCV)},
-month = {October},
-year = {2019}
-}
-```
-
-
-This codebase provides: 
-- test code
-- training code
-- data generation code
 
 ## Requirements
 - Python 3
@@ -49,44 +26,17 @@ for training and data generation
 
 Warning: I found that outdated NVIDIA drivers may cause errors with EGL. If you want to try out the EGL version, please update your NVIDIA driver to the latest!!
 
-## Windows demo installation instuction
-
-- Install [miniconda](https://docs.conda.io/en/latest/miniconda.html)
-- Add `conda` to PATH
-- Install [git bash](https://git-scm.com/downloads)
-- Launch `Git\bin\bash.exe`
-- `eval "$(conda shell.bash hook)"` then `conda activate my_env` because of [this](https://github.com/conda/conda-build/issues/3371)
-- Automatic `env create -f environment.yml` (look [this](https://github.com/conda/conda/issues/3417))
-- OR manually setup [environment](https://towardsdatascience.com/a-guide-to-conda-environments-bc6180fc533)
-    - `conda create —name pifu python` where `pifu` is name of your environment
-    - `conda activate`
-    - `conda install pytorch torchvision cudatoolkit=10.1 -c pytorch`
-    - `conda install pillow`
-    - `conda install scikit-image`
-    - `conda install tqdm`
-    - `conda install -c menpo opencv`
-- Download [wget.exe](https://eternallybored.org/misc/wget/)
-- Place it into `Git\mingw64\bin`
-- `sh ./scripts/download_trained_model.sh`
-- Remove background from your image ([this](https://www.remove.bg/), for example)
-- Create black-white mask .png
-- Replace original from sample_images/
-- Try it out - `sh ./scripts/test.sh`
-- Download [Meshlab](http://www.meshlab.net/) because of [this](https://github.com/shunsukesaito/PIFu/issues/1)
-- Open .obj file in Meshlab
-
-
-## Demo
+## Run demo
 Warning: The released model is trained with mostly upright standing scans with weak perspectie projection and the pitch angle of 0 degree. Reconstruction quality may degrade for images highly deviated from trainining data.
-1. run the following script to download the pretrained models from the following link and copy them under `./PIFu/checkpoints/`.
+- Run the following script to download the pretrained models from the following link and copy them under `./PIFu/checkpoints/`.
 ```
 sh ./scripts/download_trained_model.sh
 ```
-
-2. run the following script. the script creates a textured `.obj` file under `./PIFu/eval_results/`. You may need to use `./apps/crop_img.py` to roughly align an input image and the corresponding mask to the training data for better performance. For background removal, you can use any off-the-shelf tools such as [removebg](https://www.remove.bg/).
-```
-sh ./scripts/test.sh
-```
+- TODO: Resize image to max dim = 512 and pad to 512x512
+- TODO: Remove background from your image use segmentation network
+- Create black-white mask `{img_name}_mask.png`
+- Replace original from sample_images/
+- Run the following script. the script creates a textured `.obj` file under `./PIFu/eval_results/`
 
 ## Demo on Google Colab
 If you do not have a setup to run PIFu, we offer Google Colab version to give it a try, allowing you to run PIFu in the cloud, free of charge. Try our Colab demo using the following notebook: 
@@ -120,6 +70,19 @@ python -m apps.train_shape --dataroot {path_to_training_data} --random_flip --ra
 2. run the following script to train the color module. 
 ```
 python -m apps.train_color --dataroot {path_to_training_data} --num_sample_inout 0 --num_sample_color 5000 --sigma 0.1 --random_flip --random_scale --random_trans
+```
+
+# Citing
+If you find the code useful in your research, please consider citing the paper.
+
+```
+@InProceedings{saito2019pifu,
+author = {Saito, Shunsuke and Huang, Zeng and Natsume, Ryota and Morishima, Shigeo and Kanazawa, Angjoo and Li, Hao},
+title = {PIFu: Pixel-Aligned Implicit Function for High-Resolution Clothed Human Digitization},
+booktitle = {The IEEE International Conference on Computer Vision (ICCV)},
+month = {October},
+year = {2019}
+}
 ```
 
 ## Related Research
