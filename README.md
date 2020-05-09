@@ -32,11 +32,26 @@ Warning: The released model is trained with mostly upright standing scans with w
 ```
 sh ./scripts/download_trained_model.sh
 ```
-- TODO: Resize image to max dim = 512 and pad to 512x512
-- TODO: Remove background from your image use segmentation network
+- Resize image to max dim = 512 and pad to 512x512 (done automatically in PGN - segnet)
+- Remove background from your image use segmentation network
+- Align the input image to be 2/3 of the frame in height
 - Create black-white mask `{img_name}_mask.png`
-- Replace original from sample_images/
-- Run the following script. the script creates a textured `.obj` file under `./PIFu/eval_results/`
+- Run script [/apps/eval.py](/apps/eval.py):
+```
+python ./apps/eval.py --name pifu_demo --batch_size 1
+--mlp_dim 257 1024 512 256 128 1
+--mlp_dim_color 513 1024 512 256 128 3
+--num_stack 4
+--num_hourglass 2
+--resolution 256
+--hg_down ave_pool
+--norm group
+--norm_color group
+--results_path /data/datasets/fitlab/demo_imgs/avatars/pifu
+--test_folder_path /data/datasets/fitlab/demo_imgs/segmentations/overlay
+--load_netG_checkpoint_path ../checkpoints/net_G
+--load_netC_checkpoint_path ../checkpoints/net_C
+```
 
 ## Demo on Google Colab
 If you do not have a setup to run PIFu, we offer Google Colab version to give it a try, allowing you to run PIFu in the cloud, free of charge. Try our Colab demo using the following notebook: 
