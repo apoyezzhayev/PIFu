@@ -108,10 +108,10 @@ class Evaluator:
 if __name__ == '__main__':
     evaluator = Evaluator(opt)
 
-    test_images = glob.glob(os.path.join(opt.test_folder_path, '*'))
-    test_images = [f for f in test_images if ('png' in f or 'jpg' in f) and (not 'mask' in f)]
-    test_masks = [f[:-4]+'_mask.png' for f in test_images]
+    test_images = glob.glob(os.path.join(opt.test_folder_path, '*_overlay.png'))
+    test_masks = glob.glob(os.path.join(opt.test_folder_path, '*_mask.png'))
 
+    print(test_images, test_masks)
     print("num; ", len(test_masks))
 
     for image_path, mask_path in tqdm.tqdm(zip(test_images, test_masks)):
@@ -120,4 +120,4 @@ if __name__ == '__main__':
             data = evaluator.load_image(image_path, mask_path)
             evaluator.eval(data, True)
         except Exception as e:
-           print("error:", e.args)
+            print("error:", e.args)
